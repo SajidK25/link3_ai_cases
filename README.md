@@ -1,8 +1,8 @@
-# Enterprise AI Automations — Local LLM Powerhouse
+# Link3 Enterprise AI Automations — Local LLM Projects
 
 > Privacy-first AI agents for real-world ISP operations. No cloud. No data leaks. Just pure local intelligence.
 
-I am the CTO of **Link3 Technologies**, the leading ISP (Internet Service Provider) in Bangladesh. This repository is where I do my tinkering — a production-ready collection of local LLM-powered enterprise automations built for an ISP/Telecom environment. Every app runs entirely on-premise using small open-source models (Qwen2.5-1.5B) via LM Studio, keeping sensitive customer and employee data completely private.
+I am Rakibul Hassan, CTO of **Link3 Technologies**, the leading ISP (Internet Service Provider) in Bangladesh. This repository is where I do my tinkering — a production-ready collection of local LLM-powered enterprise automations built for an ISP/Telecom environment. Every app runs entirely on-premise using small open-source models (Qwen2.5-1.5B) via LM Studio, keeping sensitive customer and employee data completely private.
 
 ---
 

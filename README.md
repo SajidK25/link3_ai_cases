@@ -1,356 +1,265 @@
-# Enterprise AI Automations — Local LLM Projects
+﻿# Enterprise AI Automations
 
-> Privacy-first AI agents for real-world ISP operations. No cloud. No data leaks. Just pure local intelligence.
-
-I am Rakibul Hassan, CTO of **Link3 Technologies**, the leading ISP (Internet Service Provider) in Bangladesh. This repository is where I do my tinkering — a production-ready collection of local LLM-powered enterprise automations built for an ISP/Telecom environment. Every app runs entirely on-premise using small open-source models (Qwen2.5-1.5B and Google Gemma 4 E4B) via LM Studio, keeping sensitive customer and employee data completely private.
-
----
-
-## What's Inside
-
-| App | What It Does | Stack |
-|-----|-------------|-------|
-| **ISP Ticket Classifier** | Hybrid keyword + LLM classifier that maps customer complaints to 50 diagnostic codes (L1–L4), auto-dispatches field technicians for critical issues | Streamlit, LM Studio, Regex |
-| **SLA LLM Assistant** | Intelligent service level agreement management - classifies customers into SLA tiers, assesses ticket priority, detects breach risks, and generates compliance reports | Streamlit, LM Studio |
-| **ERP AI Approval Assistant** | Human-in-the-loop AI approver for leave requests, purchase orders, and HR onboarding with policy-aware JSON decisions | Streamlit, LM Studio |
-| **Sales Funnel AI Closer** | Classifies B2B/B2C leads, identifies funnel stage, and generates copy-paste-ready replies to close deals faster | Streamlit, LM Studio |
-| **SmartGift AI Admin** | Fuzzy product matcher — maps vague customer descriptions ("something for my brother's YouTube channel") to exact inventory items | Streamlit, LM Studio |
-| **HR Leave Automation** | Playwright-powered CRM bot that reads pending leave requests and auto-approves or escalates using AI judgment | Playwright, LM Studio |
-| **LLM Stress Test Suite** | Comprehensive benchmark framework testing classifier accuracy, latency, and token usage across edge cases | Python, JSON |
-| **Network Monitor & Reasoning** | Combines ping, traceroute, DNS lookup with LLM analysis for network diagnostics and troubleshooting | Python, LM Studio |
+> Privacy-first AI agents for real-world ISP operations. No cloud. No data leaks. Pure local intelligence.
 
 ---
 
 ## Architecture Philosophy
 
-### 1. Qwen2.5-1.5B Model Architecture
+**Privacy First** - All data stays on-premises. No cloud API calls for sensitive data. Complete data sovereignty ensures your customer information never leaves your infrastructure.
 
-```
-+---------------------------------------------------------+
-|  Business User (Streamlit UI / CRM / CLI)         |
-+------------------------+-------------------------------+
-                           |
-              +------------+------------+
-              |                         |
-              v                         v
-+----------------+      +-----------------------+
-| Keyword Rules  |      | Local LLM (Qwen2.5)   |
-| (Deterministic |      | (Semantic Understanding|
-|  ~99% conf)    |      |  ~85% conf)           |
-+----------------+      +-----------------------+
-              |                         |
-              +------------+------------+
-                           v
-                 +-----------------+
-                 | Business Action  |
-                 | Dispatch/Approve |
-                 | Reply/Recommend  |
-                 +-----------------+
-```
+**Locality Only** - Run entirely on your own hardware. No internet dependency. Systems work offline when needed, giving you complete control over your AI operations.
 
-**Hybrid Design:** Fast keyword rules catch obvious patterns instantly. The local LLM handles nuance, synonyms, and edge cases. Zero API costs. Zero latency from the internet.
+**Speed Matters** - Small, efficient models (1.5B - 7B parameters) deliver fast inference times. Real-time responses for customer support without long wait times.
 
-### 2. Google Gemma 4 E4B Model Architecture
+**Modular Design** - Each project is self-contained and easy to extend. Standalone functionality means you can pick and choose what you need without adopting everything at once.
 
-```
-+---------------------------------------------------------+
-|  Business User (Streamlit UI / CRM / CLI)         |
-+------------------------+-------------------------------+
-                           |
-              +------------+------------+
-              |                         |
-              v                         v
-+----------------+      +-----------------------+
-| Keyword Rules  |      | Local LLM (Gemma 4)   |
-| (Fallback Only |      | (Enhanced Reasoning  |
-|  ~95% conf)    |      |  ~95% conf)           |
-+----------------+      +-----------------------+
-              |                         |
-              +------------+------------+
-                           v
-                 +-----------------+
-                 | Business Action  |
-                 | Dispatch/Approve |
-                 | Reply/Recommend  |
-                 +-----------------+
-```
+**Production Ready** - Built with MLOps pipelines, monitoring, and A/B testing capabilities from the start. These aren't just demos - they're ready for real deployment.
 
-**LLM-First Design:** Gemma 4 E4B prioritizes LLM reasoning for all cases, with keyword rules as a lightweight fallback. Enhanced reasoning capabilities reduce dependency on hardcoded rules.
+**Human Centric** - AI assists but humans decide. All decisions are explainable with complete audit trails. Your team stays in control of every automated process.
 
 ---
 
-## Why Local LLMs?
+## System Workflow
 
-- **Privacy:** Customer complaints, employee records, and sales leads never leave your machine
-- **Speed:** Sub-second inference on consumer GPUs / modern CPUs
-- **Cost:** No per-token billing. Run 24/7 for free.
-- **Offline:** Works without internet — perfect for internal enterprise networks
-
----
-
-## Tech Stack
-
-### Qwen2.5-1.5B Model Stack
-- **Python 3.11+**
-- **Streamlit** — Rapid internal dashboards
-- **LM Studio** — Local OpenAI-compatible LLM server
-- **Playwright** — Browser automation for CRM/ERP integration
-- **Qwen2.5-1.5B-Instruct** — The brain behind every app
-
-### Google Gemma 4 E4B Model Stack
-- **Python 3.11+**
-- **Streamlit** — Rapid internal dashboards
-- **LM Studio** — Local OpenAI-compatible LLM server
-- **Playwright** — Browser automation for CRM/ERP integration
-- **Google Gemma 4 E4B** — Enhanced reasoning capabilities
-
----
-
-## Repository Structure
+### Complete AI Pipeline
 
 ```
-├── app-baseline-class.py           # Original ISP classifier (hybrid keyword + LLM)
-├── app-classifier1.py -> app-classifier9.py  # Iterative improvements & experiments
-├── app-optimized-classifiers.py    # Production-ready optimized version (Gemma 4 E4B)
-├── app-reasoning1/2.py            # Chain-of-thought reasoning prototypes
-├── ERP_AI_Approval_Assistant.py   # ERP workflow automation
-├── HR_Assistant.py                # HR leave approval bot (Playwright)
-├── Link3_Sales_Funnel_AI_Closer.py # Sales pipeline AI
-├── SmartGift_AI_Admin.py          # Retail product recommendation
-├── llm_stress_test_class.py       # 50+ test case benchmark suite
-├── llm_*_demo.py                  # Mini demos and prototypes
-├── sla_llm_assistant.py             # ISP SLA Assistant - LLM-powered service level agreement management
-├── network_monitor.py             # Network diagnostics with LLM reasoning
-├── test_*.py                      # Unit & integration tests
-├── docs/sla-llm-assistant.md          # English documentation for SLA LLM Assistant
-├── docs/bangla/sla-llm-assistant.md   # Bangla documentation for SLA LLM Assistant
-└── README.md                       # This documentation
+User Input --> Local Server (LM Studio) --> AI Model (Qwen/Gemma) --> Response
+     ^                                                                    |
+     └────────────────────────────────────────────────────────────────────┘
+                              Feedback Loop
+```
+
+### Classification Workflow (ISP Classifier)
+
+```
+Customer Complaint
+        |
+        v
+Text Preprocessing (normalize, clean)
+        |
+        v
+Local LLM (Qwen 2.5 1.5B) --> Classification (ISP-001, ISP-006, ISP-047, etc.)
+        |
+        v
+Response Generation
+        |
+        v
+Customer Notified with ETA/Solution
+```
+
+### RAG Workflow (Qwen + RAG)
+
+```
+Documents (PDF, TXT, CSV) --> Text Chunker --> Embedding Model (Local)
+                                              |
+Query Input <----------------------------------┘
+        |
+        v
+Vector Similarity Search (Top-K Chunks)
+        |
+        v
+Context + Query --> LLM (Qwen 2.5) --> Grounded Response with Citations
+```
+
+### MLOps Pipeline Workflow
+
+```
+Train --> Validate --> Register --> Deploy --> Monitor --> Alert (if drift) --> Retrain
+                                                      |
+                                                      <─────────────────────────┘
 ```
 
 ---
 
-## Who Is This For?
+## Project Groups
 
-- Telecom/ISP support teams drowning in unstructured tickets
-- SMEs wanting AI automation without SaaS subscriptions or data risks
-- Developers prototyping enterprise LLM apps before cloud scaling
-- Anyone proving that **1.5B parameter models can run real business logic**
-- Anyone proving that **4B+ parameter models can run enhanced reasoning**
+### 1. Getting Started
+এই ফোল্ডারটি দিয়ে শুরু করুন যদি আপনি এই repository-তে নতুন হন। এখানে LM Studio-র সাথে কথা বলার প্রথম স্ক্রিপ্ট আছে যা দেখায় কিভাবে local LLM-এর সাথে যোগাযোগ করতে হয়। এটা সবচেয়ে simple এবং basic উদাহরণ - এটা বুঝলে বাকি সব কিছু সহজ হয়ে যাবে। আপনি এখান থেকে শিখবেন কিভাবে API call করতে হয় এবং AI-র কাছ থেকে response পেতে হয়।
+
+### 2. ISP Classifier
+এটা হলো আমাদের মূল classification system যা customer complaints গুলোকে diagnostic codes-এ ভাগ করে। যখন কোনো গ্রাহক সমস্যা রিপোর্ট করে, এই সিস্টেম complaint টাকে analyze করে এবং সঠিক ISP code assign করে - যেমন ISP-001 (ONT issue) বা ISP-006 (weather-related outage)। ১২টি Python script আছে যা বিভিন্ন classification approach দেখায়, rule-based থেকে শুরু করে AI-powered পর্যন্ত। আপনি baseline compare করতে পারবেন modern AI approach-এর সাথে।
+
+### 3. ISP Classifier Reasoning
+এই মডিউলে classification-এর পাশাপাশি explanation-ও আছে। এটা শুধু নির্দিষ্ট কোড দেয় না, ব্যাখ্যাও করে কেন ওই কোড বেছে নেওয়া হয়েছে। যখন আপনার support team-কে জানাতে হবে কেন একটা particular classification হয়েছে, এই system transparent reasoning provide করে। Chain-of-thought approach ব্যবহার করে complex complaints গুলোকে ভালোভাবে বোঝে এবং appropriate solutions recommend করে।
+
+### 4. Qwen + RAG
+RAG (Retrieval-Augmented Generation) হলো একটা powerful technique যা AI responses-কে আরো accurate করে। এই ফোল্ডারে Qwen 2.5 1.5B model দিয়ে knowledge-augmented responses তৈরির উদাহরণ আছে। সিস্টেমটা প্রথমে আপনার documents থেকে relevant information retrieve করে, তারপর সেটা context হিসেবে ব্যবহার করে response generate করে। এটা especially useful যখন আপনি internal policies, technical documentation, বা training materials-এর উপর ভিত্তি করে answers দিতে চান।
+
+### 5. Gemma E4B
+Google-এর Gemma 4-bit quantized model এর capabilities দেখায় এই ফোল্ডার। এটা complex reasoning এবং classification tasks-এ বেশি accurate, তবে একটু slower। Qwen-এর সাথে তুলনা করলে Gemma বেশি quality দেয় কিন্তু speed sacrifice করে। আপনি এখানে various demonstrations পাবেন - cybersecurity analysis থেকে network monitoring পর্যন্ত, সব Gemma model দিয়ে implement করা।
+
+### 6. HR Assistant
+Human Resources automation এর জন্য তৈরি করা হয়েছে এই section। তিনটি main components আছে - HR Manager যা leave approvals automate করে, HR Assistant যা employee queries handle করে, এবং Sales Funnel AI যা customer leads manage করে। যখন কোনো employee leave request করে, AI সেটা review করে balance check করে এবং appropriate action নেয়। এটা HR operations-কে significantly faster এবং consistent করে তোলে।
+
+### 7. SLA System
+Service Level Agreement monitoring এবং violation detection এর জন্য এই system। যখন একটা support ticket create হয়, SLA timer শুরু হয় এবং different priority levels-এর জন্য different thresholds আছে - P1 critical issues এর জন্য 4 ঘন্টা, P4 general inquiries এর জন্য 72 ঘন্টা। যখন SLA risk-এ চলে যায়, system automatically escalate করে এবং appropriate teams-কে notify করে। এটা service quality maintain করতে এবং SLA breaches এড়াতে সাহায্য করে।
+
+### 8. Smart Gift AI
+AI-powered gift recommendation system এই ফোল্ডারে। এটা customer preferences analyze করে এবং personalized gift suggestions দেয়। Admin interface দিয়ে products manage করা যায় এবং promotional campaigns automate করা যায়। যখন কোনো customer birthday বা anniversary approach করে, system automatically appropriate recommendations generate করে based on past behavior এবং budget।
+
+### 9. LLM Demos
+Experiments এবং benchmarking এর জন্য এই collection। এখানে বিভিন্ন size-এর test cases আছে - 5 case mini demo থেকে শুরু করে 55 case stress test পর্যন্ত। আপনি দেখতে পাবেন কিভাবে different models perform করে বিভিন্ন workloads-এ। Stress test results দেখায় কোন model কোন situation-এ ভালো এবং average response times কত। এটা আপনাকে decide করতে সাহায্য করে কোন model আপনার use case-এর জন্য best।
+
+### 10. Enterprise Apps
+Production-ready enterprise automation examples এই ফোল্ডারে। Model management থেকে testing frameworks পর্যন্ত সব আছে। আপনি এখানে learn করবেন কিভাবে models load/unload করতে হয়, token usage track করতে হয়, এবং comprehensive testing suites run করতে হয়। এগুলো actual business operations-এ use করার জন্য designed, just demos না।
+
+### 11. MLOps
+Production ML pipelines এই section-এর main focus। Customer churn prediction থেকে শুরু করে auto-retraining triggers পর্যন্ত সব included। Model registry আপনার trained models track করে, monitoring dashboard real-time performance দেখায়, এবং A/B testing framework different versions compare করার সুযোগ দেয়। যখন model drift detect হয়, system automatically retraining trigger করে। এটা complete MLOps lifecycle manage করে।
+
+---
+
+## Project Structure
+
+```
+classifier-app/
+|
+|-- isp-classifier/              Customer complaint classification (12 scripts)
+|-- isp-classifier-reasoning/     AI reasoning for support tickets (3 scripts)
+|-- hr-assistant/                 HR automation tools (3 scripts)
+|-- qwen-rag/                     Qwen + RAG knowledge system (4 scripts)
+|-- gemma-e4b/                    Gemma 1.1 4B demonstrations (3 scripts)
+|-- sla-system/                   SLA monitoring & classification (2 scripts)
+|-- smart-gift/                   AI gift recommendation admin (1 script)
+|-- llm-demos/                    LLM experiments & benchmarking (5 scripts)
+|-- enterprise-apps/              Enterprise automation examples (5 scripts)
+|-- mlops/                        Production ML pipelines (6 scripts)
+|-- getting-started/              Learning path basics (3 scripts)
+|
+|-- llmtraining/                  Documentation root (mkdocs)
+|-- translate_to_bangla.py          Bangla translation utility
+```
 
 ---
 
 ## Quick Start
 
-### Qwen2.5-1.5B Model Setup
-1. Install [LM Studio](https://lmstudio.ai/) and load **Qwen2.5-1.5B-Instruct**
-2. Start the local server on `http://localhost:1234`
-3. Run any app:
-   ```bash
-   pip install streamlit requests playwright
-   streamlit run app-optimized-classifiers.py
-   ```
-
-### Google Gemma 4 E4B Model Setup
-1. Install [LM Studio](https://lmstudio.ai/) and load **Google Gemma 4 E4B**
-2. Start the local server on `http://localhost:1234`
-3. Run any app:
-   ```bash
-   pip install streamlit requests playwright
-   streamlit run app-optimized-classifiers.py
-   ```
-
----
-
-## Key Results
-
-### Qwen2.5-1.5B Model Results
-- **50 ISP codes** classified with hybrid keyword fallback achieving near-instant deterministic responses
-- **Field dispatch automation** for critical L2 physical layer issues (fiber cuts, cable damage, signal loss)
-- **End-to-end CRM automation** from login to approval click
-- **Stress-tested** on 50+ edge cases covering every support category
-
-### Google Gemma 4 E4B Model Results
-- **Enhanced reasoning** capabilities reducing rule-based dependency
-- **Improved accuracy** on complex and ambiguous customer complaints
-- **LLM-first classification** prioritizing semantic understanding
-- **Network monitoring integration** demonstrating reasoning on network diagnostics
-- **Maintained performance** while reducing keyword rule complexity
-
----
-
-## Model Comparison
-
-| Feature | Qwen2.5-1.5B | Google Gemma 4 E4B |
-|---------|-------------|-------------------|
-| **Parameters** | 1.5B | 4B |
-| **Context Window** | 8K tokens | 8K tokens |
-| **Reasoning** | Basic semantic understanding | Enhanced reasoning capabilities |
-| **Classification** | Hybrid (keyword + LLM) | LLM-first with keyword fallback |
-| **Accuracy** | ~85% on complex cases | ~95% on complex cases |
-| **Speed** | Fast inference | Slightly slower but more accurate |
-| **Use Case** | Deterministic + fallback | Enhanced reasoning + analysis |
-
----
-
-*Built at Link3 Technologies — proving that small, local models can power serious enterprise workflows.*
-
----
-
-# এন্টারপ্রাইজ AI অটোমেশন - লোকাল LLM প্রজেক্ট
-
-> প্রাইভেসি-ফার্স্ট AI এজেন্টস রিয়েল-ওয়ার্ল্ড ISP অপারেশনগুলোতে। ক্লাউড নেই, ডেটা লিকস নেই, শুধু বাংলা বুদ্ধিমত্তা।
-
-আমি রাকিবুল হাসান, লিংক৩ টেকনোলজির সিটিও, বাংলাদেশের লিডিং ইন্টারনেট সার্ভিস প্রোভাইডার। এই রিপোজিটরি আমার টিংকারিং স্পেস — একটি প্রোডাকশন-রেডি কালেকশন লোকাল LLM-পাওয়ার্ড এন্টারপ্রাইজ অটোমেশন যা ISP/টেলিকম এনভাইরনমেন্টের জন্য তৈরি করা হয়েছে। প্রতিটি অ্যাপ কমপ্লিটলি অন-প্রেমিসে চলে, ছোট ওপেন-সোর্স মডেল (Qwen2.5-1.5B এবং Google Gemma 4 E4B) LM স্টুডিওর মাধ্যমে ব্যবহার করে, সেনসিটিভ কাস্টমার এবং এমপ্লয়ি ডেটা কমপ্লিটলি প্রাইভেট রাখে।
-
----
-
-## এখানে কী আছে
-
-আমাদের কাছে কিছু দারুণ অ্যাপ আছে যা আপনার কাজকে অনেক সহজ করে দেবে।
-
-**ISP টিকিট ক্লাসিফায়ার** হলো একটি হাইব্রিড কি-ওয়ার্ড + LLM ক্লাসিফায়ার যা কাস্টমারদের কমপ্লেনগুলোকে ৫০টি ডায়াগনস্টিক কোডে (L1–L4) ম্যাপ করে। ক্রিটিক্যাল ইস্যুগুলোর জন্য এটি অটোমেটিক্যালি ফিল্ড টেকনিশিয়ানদের পাঠিয়ে দেয়। স্ট্রিমলিট, LM স্টুডিও, রেগেক্স ব্যবহার করে তৈরি এই অ্যাপটি খুবই কার্যকর।
-
-**SLA LLM অ্যাসিস্ট্যান্ট** হলো ইন্টেলিজেন্ট সার্ভিস লেভেল এগ্রিমেন্ট ম্যানেজার — কাস্টমারদের SLA টিয়ারে ক্লাসিফাই করে, টিকিটের প্রায়োরিটি অ্যাসেস করে, ব্রিচ রিস্ক শনাক্ত করে এবং কমপ্লায়েন্স রিপোর্ট জেনারেট করে। স্ট্রিমলিট এবং LM স্টুডিও ব্যবহার করে এটি তৈরি।
-
-**ERP AI অ্যাপ্রুভাল অ্যাসিস্ট্যান্ট** হলো হিউম্যান-ইন-দ্য-লুপ AI অ্যাপ্রুভার যা লিভ রিকুয়েস্ট, পারচেস অর্ডার, এবং HR অনবোর্ডিংয়ের জন্য পলিসি-অওয়্যার JSON ডিসিশন নেয়। স্ট্রিমলিট, LM স্টুডিও দিয়ে বানানো এই সিস্টেমটি খুবই উপযোগী।
-
-**সেলস ফানেল AI ক্লোজার** হলো এমন একটি অ্যাপ যা B2B/B2C লিডস ক্লাসিফাই করে, ফানেল স্টেজ চিহ্নিত করে এবং দ্রুত ডিল ক্লোজ করার জন্য কপি-পেস্ট-রেডি রিপ্লাই জেনারেট করে। স্ট্রিমলিট এবং LM স্টুডিও ব্যবহার করে এটি তৈরি।
-
-**স্মার্টগিফট AI অ্যাডমিন** হলো ফাজি প্রডাক্ট ম্যাচার — কাস্টমারদের ভাগ ক্রিপশন ("আমার ভাইয়ের ইউটিউব চ্যানেলের জন্য কিছু") এক্স্যাক্ট ইনভেন্টরি আইটেমে ম্যাপ করে। স্ট্রিমলিট এবং LM স্টুডিও দিয়ে বানানো।
-
-**HR লিভ অটোমেশন** হলো প্লেইরাইট-পাওয়ার্ড CRM বট যা পেন্ডিং লিভ রিকুয়েস্ট পড়ে এবং AI জাজমেন্ট ব্যবহার করে অটোমেটিক্যালি অ্যাপ্রুভ বা এস্কেলেট করে। প্লেইরাইট এবং LM স্টুডিও ব্যবহার করে এটি তৈরি।
-
-**LLM স্ট্রেস টেস্ট সুইট** হলো কমপ্রিহেনসিভ বেঞ্চমার্ক ফ্রেমওয়ার্ক যা এজ কেসগুলোতে ক্লাসিফায়ার অ্যাকুরেসি, লেটেন্সি এবং টোকেন ইউজেজ টেস্ট করে। পাইথন, জেসন ব্যবহার করে বানানো।
-
-**নেটওয়ার্ক মনিটর & রিজনিং** হলো এমন একটি সিস্টেম যা পিং, ট্রেসারাউট, DNS লুকআপকে LLM অ্যানালাইসিসের সাথে কানেক্ট করে নেটওয়ার্ক ডায়াগনস্টিকস এবং ট্রাবলশুটিংয়ের জন্য। পাইথন এবং LM স্টুডিও ব্যবহার করে তৈরি।
-
----
-
-## আর্কিটেকচার ফিলোসফি
-
-### ১. Qwen2.5-1.5B মডেল আর্কিটেকচার
-
-বিজনেস ইউজার (স্ট্রিমলিট UI / CRM / CLI) থেকে শুরু করে, কি-ওয়ার্ড রুলস এবং লোকাল LLM (Qwen2.5) একসাথে কাজ করে। কি-ওয়ার্ড রুলস (ডিটারমিনিস্টিক, ~৯৯% কনফিডেন্স) দ্রুত প্যাটার্ন ক্যাচ করে। লোকাল LLM (সেমান্টিক আন্ডারস্ট্যান্ডিং, ~৮৫% কনফিডেন্স) নুয়ান্স, সিনোনিম এবং এজ কেস হ্যান্ডেল করে। এরপর বিজনেস অ্যাকশন — ডিসপাচ/অ্যাপ্রুভ, রিপ্লাই/রেকমেন্ড হয়।
-
-হাইব্রিড ডিজাইন: দ্রুত কি-ওয়ার্ড রুলস স্পষ্ট প্যাটার্নগুলো ইনস্ট্যান্টলি ক্যাচ করে। লোকাল LLM নুয়ান্স, সিনোনিম এবং এজ কেস হ্যান্ডেল করে। জিরো API কস্টস। ইন্টারনেট থেকে জিরো লেটেন্সি।
-
-### ২. Google Gemma 4 E4B মডেল আর্কিটেকচার
-
-বিজনেস ইউজার (স্ট্রিমলিট UI / CRM / CLI) থেকে শুরু করে, কি-ওয়ার্ড রুলস (শুধু ফলব্যাক, ~৯৫% কনফিডেন্স) এবং লোকাল LLM (Gemma 4, এনহ্যান্সড রিজনিং, ~৯৫% কনফিডেন্স) একসাথে কাজ করে। LLM-ফার্স্ট ডিজাইন: Gemma 4 E4B সব কেসের জন্য LLM রিজনিংকে প্রায়োরিটি দেয়, কি-ওয়ার্ড রুলসকে লাইটওয়েট ফলব্যাক হিসেবে ব্যবহার করে। এনহ্যান্সড রিজনিং ক্যাপাবিলিটিস হার্ডকোডেড রুলের ওপর নির্ভরশীলতা কমিয়ে দেয়।
-
----
-
-## লোকাল LLM কেন?
-
-- **প্রাইভেসি**: কাস্টমার কমপ্লেন, এমপ্লয়ি রেকর্ড, এবং সেলস লিডস কখনো আপনার মেশিন ছাড়া যায় না
-- **স্পিড**: কনজিউমার GPUs / মডার্ন CPUs-তে সাব-সেকেন্ড ইনফারেন্স
-- **কস্ট**: পার-টোকেন বিলিং নেই। ২৪/৭ ফ্রিতে চালানো যায়
-- **অফলাইন**: ইন্টারনেট ছাড়াই কাজ করে — ইন্টারনাল এন্টারপ্রাইজ নেটওয়ার্কের জন্য পারফেক্ট
-
----
-
-## টেক স্ট্যাক
-
-### Qwen2.5-1.5B মডেল স্ট্যাক
-- পাইথন ৩.১১+
-- স্ট্রিমলিট — র্যাপিড ইন্টারনাল ড্যাশবোর্ড
-- LM স্টুডিও — লোকাল OpenAI-কমপ্যাটিবল LLM সার্ভার
-- প্লেইরাইট — CRM/ERP ইন্টিগ্রেশনের জন্য ব্রাউজার অটোমেশন
-- Qwen2.5-1.5B-Instruct — প্রতিটি অ্যাপের ব্রেইন
-
-### Google Gemma 4 E4B মডেল স্ট্যাক
-- পাইথন ৩.১১+
-- স্ট্রিমলিট — র্যাপিড ইন্টারনাল ড্যাশবোর্ড
-- LM স্টুডিও — লোকাল OpenAI-কমপ্যাটিবল LLM সার্ভার
-- প্লেইরাইট — CRM/ERP ইন্টিগ্রেশনের জন্য ব্রাউজার অটোমেশন
-- Google Gemma 4 E4B — এনহ্যান্সড রিজনিং ক্যাপাবিলিটিস
-
----
-
-## রিপোজিটরি স্ট্রাকচার
-
-```
-├── app-baseline-class.py           # অরিজিনাল ISP ক্লাসিফায়ার (হাইব্রিড কি-ওয়ার্ড + LLM)
-├── app-classifier1.py -> app-classifier9.py  # ইটারেটিভ ইমপ্রুভমেন্টস & এক্সপেরিমেন্টস
-├── app-optimized-classifiers.py    # প্রোডাকশন-রেডি অপ্টিমাইজড ভার্সন (Gemma 4 E4B)
-├── app-reasoning1/2.py            # চেইন-অফ-থট রিজনিং প্রোটোটাইপস
-├── ERP_AI_Approval_Assistant.py   # ERP ওয়ার্কফ্লো অটোমেশন
-├── HR_Assistant.py                # HR লিভ অ্যাপ্রুভাল বট (প্লেইরাইট)
-├── Link3_Sales_Funnel_AI_Closer.py # সেলস পাইপলাইন AI
-├── SmartGift_AI_Admin.py          # রিটেল প্রডাক্ট রেকমেন্ডেশন
-├── llm_stress_test_class.py       # ৫০+ টেস্ট কেস বেঞ্চমার্ক সুইট
-├── llm_*_demo.py                  # মিনি ডেমোস & প্রোটোটাইপস
-├── sla_llm_assistant.py             # ISP SLA অ্যাসিস্ট্যান্ট - LLM-পাওয়ার্ড সার্ভিস লেভেল এগ্রিমেন্ট ম্যানেজমেন্ট
-├── network_monitor.py             # নেটওয়ার্ক ডায়াগনস্টিকস উইথ LLM রিজনিং
-├── test_*.py                      # ইউনিট & ইন্টিগ্রেশন টেস্টস
-├── docs/sla-llm-assistant.md          # SLA LLM অ্যাসিস্ট্যান্টের ইংরেজি ডকুমেন্টেশন
-├── docs/bangla/sla-llm-assistant.md   # SLA LLM অ্যাসিস্ট্যান্টের বাংলা ডকুমেন্টেশন
-└── README.md                       # এই ডকুমেন্টেশন
+```bash
+# 1. LM Studio start করুন Qwen 2.5 1.5B বা Gemma 4 E4B দিয়ে
+# 2. প্রথম AI script run করুন
+python getting-started/talk_to_llm.py
 ```
 
 ---
 
-## এটি কার জন্য?
+## Learning Path
 
-- টেলিকম/ISP সাপোর্ট টিম যারা আনস্ট্রাকচার্ড টিকিটে ড্রাউনিং করছে
-- SME যারা SaaS সাবস্ক্রিপশন বা ডেটা রিস্ক ছাড়াই AI অটোমেশন চায়
-- ডেভেলপাররা যারা ক্লাউড স্কেলিংয়ের আগে এন্টারপ্রাইজ LLM অ্যাপ প্রোটোটাইপ করছে
-- যে কেউ প্রমাণ করতে চায় যে ১.৫B প্যারামিটার মডেলস রিয়েল বিজনেস লজিক চালাতে পারে
-- যে কেউ প্রমাণ করতে চায় যে ৪B+ প্যারামিটার মডেলস এনহ্যান্সড রিজনিং চালাতে পারে
+এই path টা follow করুন beginner থেকে advanced:
 
----
+```
+1. Getting Started ---------------------------------------------------------->
+   শিখুন: LM Studio-র সাথে যোগাযোগ, প্রথম AI response
 
-## কীভাবে শুরু করবেন?
+2. ISP Classifier -------------------------------------------------------->
+   শিখুন: Basic classification, rule-based থেকে AI
 
-### Qwen2.5-1.5B মডেল সেটআপ
-১. LM স্টুডিও (https://lmstudio.ai/) ইনস্টল করুন এবং **Qwen2.5-1.5B-Instruct** লোড করুন
-২. লোকাল সার্ভার http://localhost:1234-এ চালু করুন
-৩. কোনো অ্যাপ চালান:
-   ```bash
-   pip install streamlit requests playwright
-   streamlit run app-optimized-classifiers.py
-   ```
+3. ISP Reasoning -------------------------------------------------------->
+   শিখুন: Chain of thought, advanced reasoning
 
-### Google Gemma 4 E4B মডেল সেটআপ
-১. LM স্টুডিও (https://lmstudio.ai/) ইনস্টল করুন এবং **Google Gemma 4 E4B** লোড করুন
-২. লোকাল সার্ভার http://localhost:1234-এ চালু করুন
-৩. কোনো অ্যাপ চালান:
-   ```bash
-   pip install streamlit requests playwright
-   streamlit run app-optimized-classifiers.py
-   ```
+4. Qwen + RAG -------------------------------------------------------->
+   শিখুন: Retrieval-augmented generation
 
----
+5. Gemma E4B -------------------------------------------------------->
+   শিখুন: Google's efficient 4-bit model
 
-## কী রেজাল্ট পাওয়া গেছে
+6. HR Assistant -------------------------------------------------------->
+   শিখুন: Real-world HR automation
 
-### Qwen2.5-1.5B মডেল রেজাল্ট
-- **৫০ ISP কোড** হাইব্রিড কি-ওয়ার্ড ফলব্যাকে ক্লাসিফাইড, নিয়ার-ইনস্ট্যান্ট ডিটারমিনিস্টিক রেসপন্স পাওয়া গেছে
-- **ফিল্ড ডিসপাচ অটোমেশন** ক্রিটিক্যাল L2 ফিজিক্যাল লেয়ার ইস্যুগুলোর জন্য (ফাইবার কাটস, কেবল ড্যামেজ, সিগনাল লস)
-- **এন্ড-টু-এন্ড CRM অটোমেশন** লগিন থেকে অ্যাপ্রুভ ক্লিক পর্যন্ত
-- **স্ট্রেস-টেস্টেড** ৫০+ এজ কেসে, প্রতিটি সাপোর্ট ক্যাটাগরি কভার করে
+7. SLA System -------------------------------------------------------->
+   শিখুন: Enterprise SLA management
 
-### Google Gemma 4 E4B মডেল রেজাল্ট
-- **এনহ্যান্সড রিজনিং** ক্যাপাবিলিটিস রুল-বেসড নির্ভরশীলতা কমিয়ে দিচ্ছে
-- **ইমপ্রুভড অ্যাকুরেসি** কমপ্লেক্স এবং অ্যাম্বিগুয়াস কাস্টমার কমপ্লেনে
-- **LLM-ফার্স্ট ক্লাসিফিকেশন** সেমান্টিক আন্ডারস্ট্যান্ডিংকে প্রায়োরিটি দিচ্ছে
-- **নেটওয়ার্ক মনিটরিং ইন্টিগ্রেশন** নেটওয়ার্ক ডায়াগনস্টিকসে রিজনিং দেখাচ্ছে
-- **মেইনটেইনড পারফরমেন্স** কি-ওয়ার্ড রুল কমপ্লেক্সিটি কমিয়েও
+8. Smart Gift AI -------------------------------------------------------->
+   শিখুন: AI admin systems
+
+9. LLM Demos -------------------------------------------------------->
+   শিখুন: Experiments and benchmarking
+
+10. Enterprise Apps -------------------------------------------------------->
+   শিখুন: Production-ready applications
+
+11. MLOps -------------------------------------------------------->
+    শিখুন: Production pipelines and monitoring
+```
 
 ---
 
-## মডেল তুলনা
+## Available Models
 
-| ফিচার | Qwen2.5-1.5B | Google Gemma 4 E4B |
-|---------|-------------|-------------------|
-| প্যারামিটারস | ১.৫B | ৪B |
-| কনটেক্সট উইন্ডো | ৮K টোকেনস | ৮K টোকেনস |
-| রিজনিং | বেসিক সেমান্টিক আন্ডারস্ট্যান্ডিং | এনহ্যান্সড রিজনিং ক্যাপাবিলিটিস |
-| ক্লাসিফিকেশন | হাইব্রিড (কি-ওয়ার্ড + LLM) | LLM-ফার্স্ট উইথ কি-ওয়ার্ড ফলব্যাক |
-| অ্যাকুরেসি | কমপ্লেক্স কেসে ~৮৫% | কমপ্লেক্স কেসে ~৯৫% |
-| স্পিড | ফাস্ট ইনফারেন্স | স্লাইটলি স্লো কিন্তু মোর অ্যাকুরেট |
-| ইউজ কেস | ডিটারমিনিস্টিক + ফলব্যাক | এনহ্যান্সড রিজনিং + অ্যানালাইসিস |
+| Model | Size | Purpose | Best For | Speed |
+|-------|------|---------|----------|-------|
+| **Qwen 2.5 1.5B** | 1.5B | Classification, Reasoning | Speed, General tasks | Fast |
+| **Gemma 4 E4B** | 4B | Complex reasoning, Analysis | Accuracy, Quality | Medium |
 
 ---
 
-*লিংক৩ টেকনোলজিতে তৈরি — প্রমাণ করে যে ছোট, লোকাল মডেলস গুরুতর এন্টারপ্রাইজ ওয়ার্কফ্লো পাওয়ার করতে পারে।*
+## Tech Stack
+
+```
+Language: Python 3.10+
+LLM Runtime: LM Studio
+Vector DB: ChromaDB
+Embeddings: sentence-transformers
+Framework: LangChain, LlamaIndex
+API Server: FastAPI, Flask
+Database: PostgreSQL, MongoDB
+Monitoring: Grafana, Prometheus
+Deployment: Docker, Kubernetes
+```
+
+---
+
+## Benchmark Results
+
+llm_stress_test_report.json এর উপর ভিত্তি করে:
+
+```
+qwen2.5-coder-1.5b-instruct Results
+─────────────────────────────────────────
+Accuracy: 32.7% (18/55 tests passed)
+Avg Time: 2973ms
+Avg Tokens: 792.7
+```
+
+---
+
+## Documentation
+
+| Language | Link |
+|----------|------|
+| English | [docs/](llmtraining/docs/index.md) |
+| Bangla | [বাংলা ডক্স](llmtraining/docs/bangla/index.md) |
+
+---
+
+## Configuration
+
+```env
+# LM Studio Configuration
+LM_STUDIO_URL=http://localhost:1234/v1/chat/completions
+MODEL_NAME=qwen2.5-coder-1.5b-instruct
+
+# Vector Database
+CHROMA_PERSIST_DIR=./chroma_db
+
+# Logging
+LOG_LEVEL=INFO
+```
+
+---
+
+## Contributing
+
+Contributions welcome! Please read the documentation and follow the project structure.
+
+---
+
+## License
+
+MIT License - See LICENSE for details.
+
+---
+
+## Author
+
+**Rakibul Hassan**, CTO - Link3 Technologies
